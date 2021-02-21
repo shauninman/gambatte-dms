@@ -227,6 +227,8 @@ void apply_cfilter(SDL_Surface *surface) {
 }
 
 void printOverlay(const char *text){
+	return; // disable menu print overlay
+	
 	uint32_t hlcolor = SDL_MapRGB(textoverlay->format, 248, 252, 248);
 	SDL_FillRect(textoverlay, NULL, hlcolor);
 	SFont_WriteCenter(textoverlay, font, 0, text);

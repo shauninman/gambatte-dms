@@ -1104,13 +1104,13 @@ bool GambatteSdl::handleEvents(BlitterWrapper &blitter) {
 							}
 							else if (status>=kStatusLoadSlot) {
 								int slot = status - kStatusLoadSlot;
-								gambatte.selectState(slot);
-								gambatte.loadState();
+								gambatte.selectState_NoOsd(slot);
+								gambatte.loadState_NoOsd();
 							}
 							else if (status>=kStatusSaveSlot) {
 								int slot = status - kStatusSaveSlot;
-								gambatte.selectState(slot);
-								gambatte.saveState(blitter.inBuf().pixels, blitter.inBuf().pitch);
+								gambatte.selectState_NoOsd(slot);
+								gambatte.saveState_NoOsd(blitter.inBuf().pixels, blitter.inBuf().pitch);
 							}
 							
 							inputGetter.is = 0;
