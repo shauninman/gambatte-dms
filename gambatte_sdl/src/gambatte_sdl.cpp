@@ -1096,31 +1096,23 @@ bool GambatteSdl::handleEvents(BlitterWrapper &blitter) {
 							MenuReturnStatus status = ShowMenu(rom_path, save_path, blitter.blitter_.screen);
 							
 							if (status==kStatusExitGame) {
-								puts("exit game");
 							    gambatte.saveSavedata();
 							    return true;
 							}
 							else if (status==kStatusOpenMenu) {
-								puts("open emulator menu");
-								main_menu_with_anim(); // NOTE: if I use main_menu() it lags when animating out
+								main_menu();
 							}
 							else if (status>=kStatusLoadSlot) {
 								int slot = status - kStatusLoadSlot;
-								printf("load slot %i\n", slot);
 								gambatte.selectState(slot);
 								gambatte.loadState();
 							}
 							else if (status>=kStatusSaveSlot) {
 								int slot = status - kStatusSaveSlot;
-								printf("save slot %i\n", slot);
 								gambatte.selectState(slot);
 								gambatte.saveState(blitter.inBuf().pixels, blitter.inBuf().pitch);
 							}
-							else {
-								printf("continue (%i)\n", status);
-							}
 							
-							// main_menu_with_anim();
 							inputGetter.is = 0;
 						}
 						break;
