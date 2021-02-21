@@ -650,6 +650,7 @@ static void printControls() {
 }
 
 static char rom_path[256];
+static char save_path[256];
 
 #ifdef ROM_BROWSER
 int GambatteSdl::exec(int const argc, char const *const argv[]) {
@@ -907,7 +908,7 @@ int GambatteSdl::exec(int const argc, char const *const argv[]) {
 
 	std::string romflnm(argv[loadIndex]);
 	currgamename = strip_Dir(strip_Extension(romflnm));
-	strcpy(rom_path, romflnm.c_str());
+	strcpy(rom_path, romflnm.c_str());	
 	
 	loadConfig(); // load config.cfg file on startup
 
@@ -937,6 +938,8 @@ int GambatteSdl::exec(int const argc, char const *const argv[]) {
 
 	std::string savedir = (homedir + "/.gambatte/saves/");
 	gambatte.setSaveDir(savedir);
+	strcpy(save_path, gambatte.getSaveStatePathTemplate().c_str());
+	
 
 	//gb/gbc bootloader support
 	gambatte.setBootloaderGetter(get_bootloader_from_file);
@@ -1089,10 +1092,6 @@ bool GambatteSdl::handleEvents(BlitterWrapper &blitter) {
 						if((menuout == -1) && (menuin == -1)){
 							ffwdtoggle = 0;
 							
-							// TODO: is this copy necessary?
-							char save_path[256];
-							strcpy(save_path, gambatte.getSaveStatePathTemplate().c_str());
-
 							MenuReturnStatus status = ShowMenu(rom_path, save_path, blitter.blitter_.screen);
 							
 							if (status==kStatusExitGame) {
