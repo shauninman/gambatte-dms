@@ -12,5 +12,6 @@ DEFINES = -DHAVE_STDINT_H -DVERSION_BITTBOY
 INCLUDES = -Isrc/gambatte_sdl -Ilibgambatte -Icommon -Iinclude -Ilibgambatte/include -Ilibgambatte/src $(SDL_CFLAGS)
 OPT_FLAGS  = -Ofast -fdata-sections -fdata-sections -fno-common -fno-PIC -flto
 # EXTRA_LDFLAGS = -lasound -lmikmod -lmodplug -Wl,--as-needed -Wl,--gc-sections -flto -s
+EXTRA_LDFLAGS = -lmmenu -lSDL_TTF -lSDL_Image
 
 include common.mk

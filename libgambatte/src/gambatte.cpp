@@ -37,6 +37,11 @@ static std::string const statePath(std::string const &basePath, int stateNo) {
 	return basePath + "_" + itos(stateNo) + ".gqs";
 }
 
+static std::string const statePathTemplate(std::string const &basePath) {
+	return basePath + "_%i.gqs";
+}
+
+
 namespace gambatte {
 
 struct GB::Priv {
@@ -61,6 +66,10 @@ GB::~GB() {
 
 std::string GB::getSaveStatePath(int statenum){
 	return statePath(p_->cpu.saveBasePath(), statenum);
+}
+
+std::string GB::getSaveStatePathTemplate(){
+	return statePathTemplate(p_->cpu.saveBasePath());
 }
 
 std::ptrdiff_t GB::runFor(gambatte::uint_least32_t *const videoBuf, std::ptrdiff_t const pitch,

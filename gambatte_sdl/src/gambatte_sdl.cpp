@@ -45,6 +45,11 @@
 #include <sys/stat.h>
 #include "../menu.h"
 
+extern "C"
+{
+	#include <mmenu.h>
+}
+
 bool get_bootloader_from_file(void* userdata, bool isgbc, uint8_t* data, uint32_t buf_size)
 {
 	if(biosenabled == 0){
@@ -644,6 +649,8 @@ static void printControls() {
 	std::puts("Select:\trshift");
 }
 
+static char rom_path[256];
+
 #ifdef ROM_BROWSER
 int GambatteSdl::exec(int const argc, char const *const argv[]) {
 	std::puts("Gambatte SDL"
@@ -900,7 +907,8 @@ int GambatteSdl::exec(int const argc, char const *const argv[]) {
 
 	std::string romflnm(argv[loadIndex]);
 	currgamename = strip_Dir(strip_Extension(romflnm));
-
+	strcpy(rom_path, romflnm.c_str());
+	
 	loadConfig(); // load config.cfg file on startup
 
 	for (std::size_t i = 0; i < inputOption.numMappings(); ++i) {
@@ -1080,7 +1088,39 @@ bool GambatteSdl::handleEvents(BlitterWrapper &blitter) {
 					case SDLK_ESCAPE: // Menu button TRIMUI
 						if((menuout == -1) && (menuin == -1)){
 							ffwdtoggle = 0;
-							main_menu_with_anim();
+							
+							// TODO: is this copy necessary?
+							char save_path[256];
+							strcpy(save_path, gambatte.getSaveStatePathTemplate().c_str());
+
+							MenuReturnStatus status = ShowMenu(rom_path, save_path, blitter.blitter_.screen);
+							
+							if (status==kStatusExitGame) {
+								puts("exit game");
+							    gambatte.saveSavedata();
+							    return true;
+							}
+							else if (status==kStatusOpenMenu) {
+								puts("open emulator menu");
+								main_menu_with_anim(); // NOTE: if I use main_menu() it lags when animating out
+							}
+							else if (status>=kStatusLoadSlot) {
+								int slot = status - kStatusLoadSlot;
+								printf("load slot %i\n", slot);
+								gambatte.selectState(slot);
+								gambatte.loadState();
+							}
+							else if (status>=kStatusSaveSlot) {
+								int slot = status - kStatusSaveSlot;
+								printf("save slot %i\n", slot);
+								gambatte.selectState(slot);
+								gambatte.saveState(blitter.inBuf().pixels, blitter.inBuf().pitch);
+							}
+							else {
+								printf("continue (%i)\n", status);
+							}
+							
+							// main_menu_with_anim();
 							inputGetter.is = 0;
 						}
 						break;

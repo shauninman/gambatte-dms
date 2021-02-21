@@ -121,6 +121,7 @@ public:
 
 	/** Returns the savestate path for <statenum> slot */
 	std::string getSaveStatePath(int statenum);
+	std::string getSaveStatePathTemplate();
 
 	/**
 	  * Saves emulator state to the state slot selected with selectState().
