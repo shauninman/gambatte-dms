@@ -355,7 +355,7 @@ static void callback_return(menu_t *caller_menu) {
     //SDL_Delay(208);
     if(gambatte_p->isLoaded()){
         forcemenuexit = 0;
-        menuout = 144; // disable animation
+        menuout = 0;
         caller_menu->quit = 1;
     }
 }
@@ -374,7 +374,7 @@ static void callback_restart(menu_t *caller_menu) {
     } else if (can_reset == 0){//boot logo is still running, can't reset game safely
         printOverlay("Unable to reset");//print overlay text
     }
-    menuout = 144; // disable animation
+    menuout = 0;
     caller_menu->quit = 1;
 }
 
@@ -411,7 +411,7 @@ static void callback_loadgame(menu_t *caller_menu) {
     delete_menu(menu);
 
     if(forcemenuexit > 0) {
-        menuout = 144; // disable animation
+        menuout = 0;
         caller_menu->quit = 1;
     }
 }
@@ -460,7 +460,7 @@ static void callback_loaddmggame(menu_t *caller_menu) {
     free(gamelist);
 
     if(forcemenuexit > 0) {
-        menuout = 144; // disable animation
+        menuout = 0;
         caller_menu->quit = 1;
     }
 }
@@ -532,7 +532,7 @@ static void callback_loadgbcgame(menu_t *caller_menu) {
     free(gamelist);
 
     if(forcemenuexit > 0) {
-        menuout = 144; // disable animation
+        menuout = 0;
         caller_menu->quit = 1;
     }
 }
@@ -596,7 +596,7 @@ static void callback_selectstateload(menu_t *caller_menu) {
     delete_menu(menu);
 
     if(forcemenuexit > 0) {
-    	menuout = 144; // disable animation
+    	menuout = 0;
     	caller_menu->quit = 1;
     }
 }
@@ -651,7 +651,7 @@ static void callback_selectstatesave(menu_t *caller_menu) {
     delete_menu(menu);
 
     if(forcemenuexit > 0) {
-    	menuout = 144; // disable animation
+    	menuout = 0;
     	caller_menu->quit = 1;
     }
 }
@@ -811,7 +811,7 @@ static void callback_settings(menu_t *caller_menu) {
     delete_menu(menu);
 
     if(forcemenuexit > 0) {
-    	menuout = 144; // disable animation
+    	menuout = 0;
     	caller_menu->quit = 1;
     }
 }
@@ -875,7 +875,7 @@ static void callback_saveconfig_apply(menu_t *caller_menu) {
     delete_menu(menu);
 
     if(forcemenuexit > 0) {
-    	menuout = 144; // disable animation
+    	menuout = 0;
     	caller_menu->quit = 1;
     }
 }
@@ -961,7 +961,7 @@ static void callback_saveconfig_pergame_confirm(menu_t *caller_menu) {
     delete_menu(menu);
 
     if(forcemenuexit > 0) {
-        menuout = 144; // disable animation
+        menuout = 0;
         caller_menu->quit = 1;
     }
 }
@@ -991,7 +991,7 @@ static void callback_saveconfig_pergame_apply(menu_t *caller_menu) {
     delete_menu(menu);
 
     if(forcemenuexit > 0) {
-        menuout = 144; // disable animation
+        menuout = 0;
         caller_menu->quit = 1;
     }
 }
@@ -1036,7 +1036,7 @@ static void callback_deleteconfig_pergame_confirm(menu_t *caller_menu) {
     delete_menu(menu);
 
     if(forcemenuexit > 0) {
-        menuout = 144; // disable animation
+        menuout = 0;
         caller_menu->quit = 1;
     }
 }
@@ -1076,7 +1076,7 @@ static void callback_deleteconfig_pergame_apply(menu_t *caller_menu) {
     delete_menu(menu);
 
     if(forcemenuexit > 0) {
-        menuout = 144; // disable animation
+        menuout = 0;
         caller_menu->quit = 1;
     }
 }
@@ -1832,7 +1832,7 @@ static void callback_controls(menu_t *caller_menu) {
     delete_menu(menu);
 
     if(forcemenuexit > 0) {
-        menuout = 144; // disable animation
+        menuout = 0;
         caller_menu->quit = 1;
     }
 }
@@ -2087,7 +2087,7 @@ static void callback_cheats(menu_t *caller_menu) {
     delete_menu(menu);
 
     if(forcemenuexit > 0) {
-    	menuout = 144; // disable animation
+    	menuout = 0;
     	caller_menu->quit = 1;
     }
 }
@@ -2337,7 +2337,7 @@ static void callback_gamegenie_apply(menu_t *caller_menu) {
     delete_menu(menu);
 
     if(forcemenuexit > 0) {
-    	menuout = 144; // disable animation
+    	menuout = 0;
     	caller_menu->quit = 1;
     }
 }

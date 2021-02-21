@@ -347,8 +347,8 @@ void store_lastframe(SDL_Surface *surface) {
 }
 
 void anim_menuin(SDL_Surface *surface) { 
-	
 	if(menuin == 0){
+		menuin = -2;  // disable animation
 		if(gambatte_p->isCgb()){
 			if(colorfilter == 1){
 				apply_cfilter(surface_menuinout);
@@ -357,6 +357,7 @@ void anim_menuin(SDL_Surface *surface) {
 			convert_bw_surface_colors(surface_menuinout, surface_menuinout, menupalblack, menupaldark, menupallight, menupalwhite, 1); //if game is DMG, then menu matches DMG palette
 		}
 	}
+
 	if(menuin >= 0){
 		menuin += 16; //16
 		SDL_Rect srcrect;
@@ -379,7 +380,8 @@ void anim_menuin(SDL_Surface *surface) {
 }
 
 void anim_menuout(SDL_Surface *surface) { 
-
+	menuout = -1; // disable animation
+	
 	if(menuout >= 0){
 		if((firstframe >= 0) && (firstframe <= 15)){ // when new game has just been loaded, delay for 15 frames
 			// do nothing
@@ -406,7 +408,10 @@ void anim_menuout(SDL_Surface *surface) {
 }
 
 void anim_textoverlay(SDL_Surface *surface) { 
-
+	showoverlay = -1;
+	overlay_inout = 0;
+	return; // disable
+	
 	if((firstframe >= 0) && (firstframe <= 15)){ // when new game has just been loaded, delay for 15 frames
 		// do nothing
 	} else {
