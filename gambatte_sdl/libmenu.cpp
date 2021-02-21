@@ -561,7 +561,7 @@ int menu_main(menu_t *menu) {
 								textanim_reset();
 							}
 							break;
-						case KEYMAP_MENUACCEPT:	// button used to accept/select a menu item
+						case SDLK_SPACE:	// button used to accept/select a menu item
 							if(menuin == -1){
 								if (menu->entries[menu->selected_entry]->callback != NULL) {
 									footer_alt = 0;
@@ -570,7 +570,7 @@ int menu_main(menu_t *menu) {
 								}
 							}
 							break;
-						case KEYMAP_MENUCANCEL: // button used to cancel/go back
+						case SDLK_LCTRL: // button used to cancel/go back
 							if(menuin == -1){
 								if (menu->back_callback != NULL) {
 									footer_alt = 0;
@@ -782,14 +782,14 @@ int menu_cheat(menu_t *menu) {
 							}
 							dirty = 1;
 							break;
-						case KEYMAP_MENUACCEPT:	// button used to accept/select a menu item
+						case SDLK_SPACE:	// button used to accept/select a menu item
 							if (menu->entries[menu->selected_entry]->callback != NULL) {
 								footer_alt = 0;
 								menu->entries[menu->selected_entry]->callback(menu);
 								redraw_cheat(menu);
 							}
 							break;
-						case KEYMAP_MENUCANCEL: // button used to cancel/go back
+						case SDLK_LCTRL: // button used to cancel/go back
 							if (menu->back_callback != NULL) {
 								if (editmode == 1){
 									footer_alt = 0;

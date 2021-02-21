@@ -1,7 +1,8 @@
 
 CFLAGS = $(DEFINES) $(INCLUDES) $(OPT_FLAGS) -std=gnu11 
 CXXFLAGS = $(DEFINES) $(INCLUDES) $(OPT_FLAGS) -std=gnu++11 
-LDFLAGS = -Wl,--start-group -lSDL -lSDL_image -lpng -ljpeg -lSDL_mixer -logg -lvorbisidec -lmikmod -lmodplug -lm -pthread -lz -lstdc++ $(EXTRA_LDFLAGS) -Wl,--end-group
+LDFLAGS = -Wl,--start-group -lSDL -lSDL_image -lpng -lSDL_mixer -lm -pthread -lz -lstdc++ $(EXTRA_LDFLAGS) -Wl,--end-group
+# removed -ljpeg -logg -lvorbisidec -lmikmod -lmodplug for trimui
 
 # Redream (main engine)
 OBJS =  \

@@ -28,7 +28,7 @@
 #include <gambatte.h>
 #include <pakinfo.h>
 #include "../../libgambatte/src/bootloader.h"
-#include <SDL.h>
+#include <SDL/SDL.h>
 #include <algorithm>
 #include <cassert>
 #include <cstdio>
@@ -328,16 +328,16 @@ public:
 	InputOption()
 	: DescOption("input", 'i', 10)
 	{
-		ids_[0].keydata = SDLK_RETURN;
-		ids_[1].keydata = SDLK_ESCAPE;
-		ids_[2].keydata = SDLK_LCTRL;
-		ids_[3].keydata = SDLK_LALT;
+		ids_[0].keydata = SDLK_RETURN;	// start
+		ids_[1].keydata = SDLK_RCTRL;	// select
+		ids_[2].keydata = SDLK_SPACE;	// A
+		ids_[3].keydata = SDLK_LCTRL;	// B
 		ids_[4].keydata = SDLK_UP;
 		ids_[5].keydata = SDLK_DOWN;
 		ids_[6].keydata = SDLK_LEFT;
 		ids_[7].keydata = SDLK_RIGHT;
-		ids_[8].keydata = SDLK_SPACE;
-		ids_[9].keydata = SDLK_LSHIFT;
+		ids_[8].keydata = SDLK_g;	// NOTHING
+		ids_[9].keydata = SDLK_h;	// NOTHING
 	}
 
 	virtual void exec(char const *const *argv, int index);
@@ -1065,35 +1065,36 @@ bool GambatteSdl::handleEvents(BlitterWrapper &blitter) {
 
 				break;
 			case SDL_KEYDOWN:
-				if (e.key.keysym.mod & KMOD_CTRL) {
+				// if (e.key.keysym.mod & KMOD_CTRL) {
+				// 	switch (e.key.keysym.sym) {
+				// 	case SDLK_f: blitter.toggleFullScreen(); break;
+				// 	case SDLK_r: gambatte.reset(); break;
+				// 	default: break;
+				// 	}
+				// } else {
 					switch (e.key.keysym.sym) {
-					case SDLK_f: blitter.toggleFullScreen(); break;
-					case SDLK_r: gambatte.reset(); break;
-					default: break;
-					}
-				} else {
-					switch (e.key.keysym.sym) {
-					case SDLK_RCTRL: // R button in bittboy / Reset button in PocketGo / Menu button in PlayGO
-					case SDLK_BACKSPACE: // R trigger
-					case SDLK_HOME: // Power button in Opendingux devices
-					case SDLK_END: // Power/Suspend button in RetroFW devices
+					// case SDLK_RCTRL: // R button in bittboy / Reset button in PocketGo / Menu button in PlayGO
+					// case SDLK_BACKSPACE: // R trigger
+					// case SDLK_HOME: // Power button in Opendingux devices
+					// case SDLK_END: // Power/Suspend button in RetroFW devices
+					case SDLK_ESCAPE: // Menu button TRIMUI
 						if((menuout == -1) && (menuin == -1)){
 							ffwdtoggle = 0;
 							main_menu_with_anim();
 							inputGetter.is = 0;
 						}
 						break;
-					case SDLK_TAB: // L/L1 button
-						if (ffwhotkey == 2) {
-							if (ffwdtoggle == 0){
-								ffwdtoggle = 1;
-							} else if (ffwdtoggle == 1){
-								ffwdtoggle = 0;
-							}
-						} else {
-							ffwdtoggle = 0;
-						}
-						break;
+					// case SDLK_TAB: // L/L1 button
+// 						if (ffwhotkey == 2) {
+// 							if (ffwdtoggle == 0){
+// 								ffwdtoggle = 1;
+// 							} else if (ffwdtoggle == 1){
+// 								ffwdtoggle = 0;
+// 							}
+// 						} else {
+// 							ffwdtoggle = 0;
+// 						}
+// 						break;
 					/*
 					case SDLK_F5:
 						gambatte.saveState(blitter.inBuf().pixels, blitter.inBuf().pitch);
@@ -1115,7 +1116,7 @@ bool GambatteSdl::handleEvents(BlitterWrapper &blitter) {
 					*/
 					default: break;
 					}
-				}
+				// }
 				// fallthrough
 			case SDL_KEYUP:
 				for (std::pair<keymap_t::iterator, keymap_t::iterator> range =
@@ -1139,6 +1140,8 @@ static std::size_t const gb_samples_per_frame = 35112;
 static std::size_t const gambatte_max_overproduction = 2064;
 
 static bool isFastForward(Uint8 const *keys) {
+	return false; // TODO: maybe remap this to X or Y so it doesn't interfer with L/R hardware shortcuts?
+	
 	if (ffwhotkey == 1) {
 		return keys[SDLK_TAB];
 	} else if (ffwhotkey == 2) {
