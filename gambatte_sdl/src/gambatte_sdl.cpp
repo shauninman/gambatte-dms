@@ -1093,7 +1093,7 @@ bool GambatteSdl::handleEvents(BlitterWrapper &blitter) {
 							ffwdtoggle = 0;
 							
 							SDL_Surface* screen = blitter.blitter_.screen;
-							MenuReturnStatus status = ShowMenu(rom_path, save_path, screen);
+							MenuReturnStatus status = ShowMenu(rom_path, save_path, screen, kMenuEventKeyDown);
 							
 							if (status==kStatusExitGame) {
 							    gambatte.saveSavedata();
