@@ -1092,10 +1092,13 @@ bool GambatteSdl::handleEvents(BlitterWrapper &blitter) {
 						if((menuout == -1) && (menuin == -1)){
 							ffwdtoggle = 0;
 							
-							MenuReturnStatus status = ShowMenu(rom_path, save_path, blitter.blitter_.screen);
+							SDL_Surface* screen = blitter.blitter_.screen;
+							MenuReturnStatus status = ShowMenu(rom_path, save_path, screen);
 							
 							if (status==kStatusExitGame) {
 							    gambatte.saveSavedata();
+								SDL_FillRect(screen, NULL, 0);
+								SDL_Flip(screen);
 							    return true;
 							}
 							else if (status==kStatusOpenMenu) {
