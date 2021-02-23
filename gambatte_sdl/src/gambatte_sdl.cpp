@@ -938,8 +938,6 @@ int GambatteSdl::exec(int const argc, char const *const argv[]) {
 
 	std::string savedir = (homedir + "/.gambatte/saves/");
 	gambatte.setSaveDir(savedir);
-	strcpy(save_path, gambatte.getSaveStatePathTemplate().c_str());
-	
 
 	//gb/gbc bootloader support
 	gambatte.setBootloaderGetter(get_bootloader_from_file);
@@ -962,7 +960,9 @@ int GambatteSdl::exec(int const argc, char const *const argv[]) {
 		std::printf("header checksum: %s\n", pak.headerChecksumOk() ? "ok" : "bad");
 		std::printf("cgb: %d\n", gambatte.isCgb());
 	}
-
+	
+	strcpy(save_path, gambatte.getSaveStatePathTemplate().c_str());
+	
 	SdlIniter sdlIniter;
 	if (sdlIniter.isFailed())
 		return EXIT_FAILURE;
