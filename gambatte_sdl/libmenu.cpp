@@ -1385,6 +1385,7 @@ void createBorderSurface(){
 		case SCALER_3X_DOTMTRIX:	/* Dot Matrix 3x scaler */
 		case SCALER_3X_CRT:	/* CRT 3x scaler */
 #endif
+		case SCALER_15X_SHARP:
 		case SCALER_15X:		/* Ayla's 1.5x scaler */
 		case SCALER_15X_BILINEAR:		/* Bilinear 1.5x scaler */
 			borderimg = SDL_CreateRGBSurface(SDL_SWSURFACE, 212, 160, 16, 0, 0, 0, 0);
@@ -1511,6 +1512,7 @@ void paint_border(SDL_Surface *surface){
     		rect.h = 240;
 			SDL_BlitSurface(borderimg, &rect, surface, NULL);
 			break;
+		case SCALER_15X_SHARP:
 		case SCALER_15X:		/* Ayla's 1.5x scaler */
 		case SCALER_15X_BILINEAR:		/* Bilinear 1.5x scaler */
 			rect.x = 0;

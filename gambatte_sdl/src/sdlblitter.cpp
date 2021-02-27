@@ -154,6 +154,7 @@ void SdlBlitter::setBufferDimensions() {
 #endif
 	switch(selectedscaler) {
 		case SCALER_NONE:		/* no scaler */
+		case SCALER_15X_SHARP:
 		case SCALER_15X:		/* Ayla's 1.5x scaler */
 		case SCALER_15X_BILINEAR:		/* Bilinear 1.5x scaler */
 		case SCALER_166X_FAST:		/* Fast 1.66x scaler */
@@ -231,6 +232,7 @@ void SdlBlitter::setScreenRes() {
 #endif
 	switch(selectedscaler) {
 		case SCALER_NONE:		/* no scaler */
+		case SCALER_15X_SHARP:
 		case SCALER_15X:		/* Ayla's 1.5x scaler */
 		case SCALER_15X_BILINEAR:		/* Bilinear 1.5x scaler */
 		case SCALER_166X_FAST:		/* Fast 1.66x scaler */
