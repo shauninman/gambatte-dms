@@ -112,6 +112,68 @@ void fullscreen_upscale(uint32_t *to, uint32_t *from)
     }
 }
 
+// 160x144 to 240x216 (40,12)
+void scale15x_sharp(uint32_t *dst, uint32_t *src) {
+    uint16_t *src_px = (uint16_t*) src; // 160x144
+    uint16_t *dst_px = (uint16_t*) dst; // 320x240
+	uint16_t *next_row, *prev_row;
+	
+	dst_px += 320 * 12;
+	
+	unsigned int x,y,ox=0,oy=0,c,n,skipped=0;
+	for (y=0; y<144; y++) {
+		dst_px += 40;
+		for (x=0; x<160; x++) {
+			c = *src_px;
+			*dst_px = c;
+			dst_px += 1;
+			
+			ox = !ox;
+			if (ox) {
+				n = *(src_px+1); // right
+				if (c>n) *dst_px = n; // always pick the darker
+				else *dst_px = c;
+				dst_px += 1;
+			}
+			src_px += 1;
+		}
+		dst_px += 40;
+		
+		if (skipped) {
+			// NOTE: we hit the oy condition on the iteration before this
+			// so we've just drawn the line after the one we skipped
+			// so let's jump back to the beginning of the skipped line
+			dst_px -= 320 * 2;
+			dst_px += 40;
+			prev_row += 40;
+			next_row += 40;
+			for (x=0;x<240;x++) {
+				n = *next_row;
+				c = *prev_row;
+				if (c>n) *dst_px = n; // always pick the darker
+				else *dst_px = c;
+				prev_row += 1;
+				dst_px += 1;
+				next_row += 1;
+			}
+			dst_px += 40;
+			dst_px += 320; // skip to the line after the one we had already drawn
+			skipped = 0;
+		}
+		
+		oy = !oy;
+		if (oy) {
+			// NOTE: we hit this before skipped condition
+			// we are going to skip this interpolated line
+			// and revisit it once we've drawn the next line
+			skipped = 1;
+			prev_row = dst_px - 320;
+			dst_px += 320;
+			next_row = dst_px;
+		}
+	}
+}
+
 /* Ayla's 1.5x Upscaler - 160x144 to 240x216 */
 void scale15x(uint32_t *to, uint32_t *from)
 {

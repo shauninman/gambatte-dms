@@ -1146,6 +1146,11 @@ static void callback_scaler(menu_t *caller_menu) {
     menu_entry->callback = callback_selectedscaler;
 
     menu_entry = new_menu_entry(0);
+    menu_entry_set_text(menu_entry, "1.50x Sharp");
+    menu_add_entry(menu, menu_entry);
+    menu_entry->callback = callback_selectedscaler;
+
+    menu_entry = new_menu_entry(0);
     menu_entry_set_text(menu_entry, "1.50x Fast");
     menu_add_entry(menu, menu_entry);
     menu_entry->callback = callback_selectedscaler;

@@ -56,7 +56,7 @@ Mix_Chunk *menusound_move = NULL;
 Mix_Chunk *menusound_ok = NULL;
 
 // Default config values
-int selectedscaler = 0, showfps = 0, ghosting = 1, biosenabled = 0, colorfilter = 0, gameiscgb = 0, buttonlayout = 0, stereosound = 0, prefercgb = 0, ffwhotkey = 1;
+int selectedscaler = SCALER_NONE, showfps = 0, ghosting = 1, biosenabled = 0, colorfilter = 0, gameiscgb = 0, buttonlayout = 0, stereosound = 0, prefercgb = 0, ffwhotkey = 1;
 uint32_t menupalblack = 0x000000, menupaldark = 0x505450, menupallight = 0xA8A8A8, menupalwhite = 0xF8FCF8;
 int filtervalue[12] = {135, 20, 0, 25, 0, 125, 20, 25, 0, 20, 105, 30};
 std::string dmgbordername = "DEFAULT", gbcbordername = "DEFAULT", palname = "DEFAULT", filtername = "NONE", currgamename = "default";
@@ -1375,29 +1375,29 @@ void paint_titlebar(SDL_Surface *surface){
 
 void createBorderSurface(){
 	switch(selectedscaler) {
-		case 5:		/* Ayla's fullscreen scaler */
-		case 6:		/* Bilinear fullscreen scaler */
-		case 11:	/* Hardware Fullscreen */
+		case SCALER_FULLSCREEN:			/* Ayla's fullscreen scaler */
+		case SCALER_FULLSCREEN_BILINEAR:	/* Bilinear fullscreen scaler */
+		case SCALER_HARDWARE_FULLSCREEN:	/* Hardware Fullscreen */
 #ifdef VGA_SCREEN
-		case 14:	/* CRT Fullscreen scaler */
+		case SCALER_FULLSCREEN_CRT:	/* CRT Fullscreen scaler */
 			borderimg = SDL_CreateRGBSurface(SDL_SWSURFACE, 8, 8, 16, 0, 0, 0, 0);
 			break;
-		case 12:	/* Dot Matrix 3x scaler */
-		case 13:	/* CRT 3x scaler */
+		case SCALER_3X_DOTMTRIX:	/* Dot Matrix 3x scaler */
+		case SCALER_3X_CRT:	/* CRT 3x scaler */
 #endif
-		case 1:		/* Ayla's 1.5x scaler */
-		case 2:		/* Bilinear 1.5x scaler */
+		case SCALER_15X:		/* Ayla's 1.5x scaler */
+		case SCALER_15X_BILINEAR:		/* Bilinear 1.5x scaler */
 			borderimg = SDL_CreateRGBSurface(SDL_SWSURFACE, 212, 160, 16, 0, 0, 0, 0);
 			break;
-		case 3:		/* Fast 1.66x scaler */
-		case 4:		/* Bilinear 1.66x scaler */
+		case SCALER_166X_FAST:		/* Fast 1.66x scaler */
+		case SCALER_166X_BILINEAR:		/* Bilinear 1.66x scaler */
 			borderimg = SDL_CreateRGBSurface(SDL_SWSURFACE, 192, 144, 16, 0, 0, 0, 0);
 			break;
-		case 0:		/* no scaler */
-		case 7:		/* Hardware 1.25x */
-		case 8:		/* Hardware 1.36x */
-		case 9:		/* Hardware 1.5x */
-		case 10:	/* Hardware 1.66x */
+		case SCALER_NONE:		/* no scaler */
+		case SCALER_HARDWARE_125X:		/* Hardware 1.25x */
+		case SCALER_HARDWARE_136X:		/* Hardware 1.36x */
+		case SCALER_HARDWARE_15X:		/* Hardware 1.5x */
+		case SCALER_HARDWARE_166X:	/* Hardware 1.66x */
 		default:
 			borderimg = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 240, 16, 0, 0, 0, 0);
 			break;
@@ -1504,15 +1504,15 @@ void paint_border(SDL_Surface *surface){
 	uint32_t barcolor = SDL_MapRGB(surface->format, 0, 0, 0);
 	int bpp = surface->format->BytesPerPixel;
 	switch(selectedscaler) {
-		case 0:		/* no scaler */
+		case SCALER_NONE:		/* no scaler */
 			rect.x = 0;
     		rect.y = 0;
     		rect.w = 320;
     		rect.h = 240;
 			SDL_BlitSurface(borderimg, &rect, surface, NULL);
 			break;
-		case 1:		/* Ayla's 1.5x scaler */
-		case 2:		/* Bilinear 1.5x scaler */
+		case SCALER_15X:		/* Ayla's 1.5x scaler */
+		case SCALER_15X_BILINEAR:		/* Bilinear 1.5x scaler */
 			rect.x = 0;
     		rect.y = 0;
     		rect.w = 1;
@@ -1526,8 +1526,8 @@ void paint_border(SDL_Surface *surface){
     		offset = 1;
 			scaleborder15x((uint32_t*)((uint8_t *)surface->pixels + offset * bpp), (uint32_t*)borderimg->pixels);
 			break;
-		case 3:		/* Fast 1.66x scaler */
-		case 4:		/* Bilinear 1.66x scaler */
+		case SCALER_166X_FAST:		/* Fast 1.66x scaler */
+		case SCALER_166X_BILINEAR:		/* Bilinear 1.66x scaler */
 			scaleborder166x((uint32_t*)((uint8_t *)surface->pixels), (uint32_t*)borderimg->pixels);
 			rect.x = 0;
     		rect.y = 0;
@@ -1540,28 +1540,28 @@ void paint_border(SDL_Surface *surface){
     		SDL_FillRect(surface, &rect, barcolor);
 			SDL_FillRect(surface, &rectb, barcolor);
 			break;
-		case 7:		/* Hardware 1.25x */
+		case SCALER_HARDWARE_125X:		/* Hardware 1.25x */
 			rect.x = 32;
     		rect.y = 24;
     		rect.w = 256;
     		rect.h = 192;
     		SDL_BlitSurface(borderimg, &rect, surface, NULL);
 			break;
-		case 8:		/* Hardware 1.36x */
+		case SCALER_HARDWARE_136X:		/* Hardware 1.36x */
 			rect.x = 48;
     		rect.y = 32;
     		rect.w = 224;
     		rect.h = 176;
     		SDL_BlitSurface(borderimg, &rect, surface, NULL);
 			break;
-		case 9:		/* Hardware 1.5x */
+		case SCALER_HARDWARE_15X:		/* Hardware 1.5x */
 			rect.x = 56;
     		rect.y = 40;
     		rect.w = 208;
     		rect.h = 160;
     		SDL_BlitSurface(borderimg, &rect, surface, NULL);
 			break;
-		case 10:	/* Hardware 1.66x*/
+		case SCALER_HARDWARE_166X:	/* Hardware 1.66x*/
 			rect.x = 64;
     		rect.y = 48;
     		rect.w = 192;
@@ -1569,7 +1569,7 @@ void paint_border(SDL_Surface *surface){
     		SDL_BlitSurface(borderimg, &rect, surface, NULL);
 			break;
 #ifdef VGA_SCREEN
-		case 12:	/* Dot Matrix 3x scaler */
+		case SCALER_3X_DOTMTRIX:	/* Dot Matrix 3x scaler */
 			rect.x = 0;
     		rect.y = 0;
     		rect.w = 2;
@@ -1583,7 +1583,7 @@ void paint_border(SDL_Surface *surface){
     		offset = 2;
 			scaleborder3x((uint32_t*)((uint8_t *)surface->pixels + offset * bpp), (uint32_t*)borderimg->pixels);
 			break;
-		case 13:	/* CRT 3x scaler */
+		case SCALER_3X_CRT:	/* CRT 3x scaler */
 			rect.x = 0;
     		rect.y = 0;
     		rect.w = 2;
@@ -1597,11 +1597,11 @@ void paint_border(SDL_Surface *surface){
     		offset = 2;
 			scaleborder3x_crt((uint32_t*)((uint8_t *)surface->pixels + offset * bpp), (uint32_t*)borderimg->pixels);
 			break;
-		case 14:	/* CRT Fullscreen */
+		case SCALER_FULLSCREEN_CRT:	/* CRT Fullscreen */
 #endif
-		case 5:		/* Ayla's fullscreen scaler */
-		case 6:		/* Bilinear fullscreen scaler */
-		case 11:	/* Hardware Fullscreen */
+		case SCALER_FULLSCREEN:		/* Ayla's fullscreen scaler */
+		case SCALER_FULLSCREEN_BILINEAR:		/* Bilinear fullscreen scaler */
+		case SCALER_HARDWARE_FULLSCREEN:	/* Hardware Fullscreen */
 			rect.x = 0;
     		rect.y = 0;
     		rect.w = 0;
@@ -1952,7 +1952,7 @@ void loadPalette(std::string palettefile){
     } else if(palettefile == "DEFAULT"){
 		Uint32 value;
 #ifdef VGA_SCREEN
-		if (selectedscaler == 12) {
+		if (selectedscaler == SCALER_3X_DOTMTRIX) {
 			for (int i = 0; i < 3; ++i) {
 		        for (int k = 0; k < 4; ++k) {
 		            if(k == 0)
@@ -2006,7 +2006,7 @@ void loadPalette(std::string palettefile){
 					printf("Palette file %s not found. Loading default palette...\n", filepath.c_str());
 					Uint32 value;
 #ifdef VGA_SCREEN
-					if (selectedscaler == 12) {
+					if (selectedscaler == SCALER_3X_DOTMTRIX) {
 						for (int i = 0; i < 3; ++i) {
 					        for (int k = 0; k < 4; ++k) {
 					            if(k == 0)
