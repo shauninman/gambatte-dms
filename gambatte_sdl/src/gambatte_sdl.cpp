@@ -810,6 +810,7 @@ int GambatteSdl::exec(int const argc, char const *const argv[]) {
 
 #else //ROM_BROWSER
 
+static void* mmenu = NULL;
 int GambatteSdl::exec(int const argc, char const *const argv[]) {
 	std::puts("Gambatte SDL"
 #ifdef GAMBATTE_SDL_VERSION_STR
@@ -909,6 +910,7 @@ int GambatteSdl::exec(int const argc, char const *const argv[]) {
 	std::string romflnm(argv[loadIndex]);
 	currgamename = strip_Dir(strip_Extension(romflnm));
 	strcpy(rom_path, romflnm.c_str());	
+	mmenu = dlopen("libmmenu.so", RTLD_LAZY);
 	
 	loadConfig(); // load config.cfg file on startup
 
@@ -1093,28 +1095,34 @@ bool GambatteSdl::handleEvents(BlitterWrapper &blitter) {
 							ffwdtoggle = 0;
 							
 							SDL_Surface* screen = blitter.blitter_.screen;
-							MenuReturnStatus status = ShowMenu(rom_path, save_path, screen, kMenuEventKeyDown);
+							if (mmenu) {
+								ShowMenu_t ShowMenu = (ShowMenu_t)dlsym(mmenu, "ShowMenu");
+								
+								MenuReturnStatus status = ShowMenu(rom_path, save_path, screen, kMenuEventKeyDown);
 							
-							if (status==kStatusExitGame) {
-							    gambatte.saveSavedata();
-								SDL_FillRect(screen, NULL, 0);
-								SDL_Flip(screen);
-							    return true;
+								if (status==kStatusExitGame) {
+								    gambatte.saveSavedata();
+									SDL_FillRect(screen, NULL, 0);
+									SDL_Flip(screen);
+								    return true;
+								}
+								else if (status==kStatusOpenMenu) {
+									main_menu();
+								}
+								else if (status>=kStatusLoadSlot) {
+									int slot = status - kStatusLoadSlot;
+									gambatte.selectState_NoOsd(slot);
+									gambatte.loadState_NoOsd();
+								}
+								else if (status>=kStatusSaveSlot) {
+									int slot = status - kStatusSaveSlot;
+									gambatte.selectState_NoOsd(slot);
+									gambatte.saveState_NoOsd(blitter.inBuf().pixels, blitter.inBuf().pitch);
+								}
 							}
-							else if (status==kStatusOpenMenu) {
+							else {
 								main_menu();
 							}
-							else if (status>=kStatusLoadSlot) {
-								int slot = status - kStatusLoadSlot;
-								gambatte.selectState_NoOsd(slot);
-								gambatte.loadState_NoOsd();
-							}
-							else if (status>=kStatusSaveSlot) {
-								int slot = status - kStatusSaveSlot;
-								gambatte.selectState_NoOsd(slot);
-								gambatte.saveState_NoOsd(blitter.inBuf().pixels, blitter.inBuf().pitch);
-							}
-							
 							inputGetter.is = 0;
 						}
 						break;
