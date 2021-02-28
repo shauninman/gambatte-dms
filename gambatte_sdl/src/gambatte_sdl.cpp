@@ -1261,7 +1261,8 @@ int GambatteSdl::run(long const sampleRate, int const latency, int const periods
 			main_menu();
 		}
 	}
-
+	
+	if (mmenu) dlclose(mmenu);
 	return 0;
 }
 
