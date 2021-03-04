@@ -114,6 +114,9 @@ void fullscreen_upscale(uint32_t *to, uint32_t *from)
 
 // 160x144 to 240x216 (40,12)
 void scale15x_sharp(uint32_t *dst, uint32_t *src) {
+	// NOTE: this works because every column or row is adjacent to an interpolated 
+	// one meaning that all strokes end up being the same thickness
+	
     uint16_t *src_px = (uint16_t*) src; // 160x144
     uint16_t *dst_px = (uint16_t*) dst; // 320x240
 	uint16_t *next_row, *prev_row;
