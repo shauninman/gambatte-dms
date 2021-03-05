@@ -45,6 +45,7 @@
 #include <sys/stat.h>
 #include "../menu.h"
 
+#include <dlfcn.h>
 extern "C"
 {
 	#include <mmenu.h>
