@@ -1263,7 +1263,7 @@ int GambatteSdl::run(long const sampleRate, int const latency, int const periods
 		}
 	}
 	
-	if (mmenu) dlclose(mmenu);
+	// if (mmenu) dlclose(mmenu);
 	return 0;
 }
 
