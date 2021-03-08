@@ -1,2 +1,3 @@
 *.o
 gambatte-dms
+gambatte_sdl/builddate.h
