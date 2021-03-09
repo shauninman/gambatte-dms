@@ -1127,7 +1127,7 @@ bool GambatteSdl::handleEvents(BlitterWrapper &blitter) {
 							inputGetter.is = 0;
 						}
 						break;
-					case SDLK_LSHIFT: // X button TRIMUI
+					case SDLK_TAB: // L/L1 button
 						if (ffwhotkey == 2) {
 							if (ffwdtoggle == 0){
 								ffwdtoggle = 1;
@@ -1184,7 +1184,7 @@ static std::size_t const gambatte_max_overproduction = 2064;
 
 static bool isFastForward(Uint8 const *keys) {
 	if (ffwhotkey == 1) {
-		return keys[SDLK_LSHIFT]; // X button TRIMUI
+		return keys[SDLK_TAB]; // L/L1 button
 	} else if (ffwhotkey == 2) {
 		if (ffwdtoggle == 0){
 			return false;
