@@ -1858,17 +1858,17 @@ static void callback_buttonlayout(menu_t *caller_menu) {
     menu->back_callback = callback_back;
 
     menu_entry = new_menu_entry(0);
-    menu_entry_set_text(menu_entry, "Default");
+    menu_entry_set_text(menu_entry, "Y=A X=B");
     menu_add_entry(menu, menu_entry);
     menu_entry->callback = callback_selectedbuttonlayout;
 
     menu_entry = new_menu_entry(0);
-    menu_entry_set_text(menu_entry, "Alternate");
+    menu_entry_set_text(menu_entry, "Y=B X=A B=A A=B");
     menu_add_entry(menu, menu_entry);
     menu_entry->callback = callback_selectedbuttonlayout;
 
     menu_entry = new_menu_entry(0);
-    menu_entry_set_text(menu_entry, "Alternate 2");
+    menu_entry_set_text(menu_entry, "Y=SELECT X=START");
     menu_add_entry(menu, menu_entry);
     menu_entry->callback = callback_selectedbuttonlayout;
 

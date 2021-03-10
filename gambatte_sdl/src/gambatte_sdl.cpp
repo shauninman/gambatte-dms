@@ -334,16 +334,16 @@ public:
 	InputOption()
 	: DescOption("input", 'i', 10)
 	{
-		ids_[0].keydata = SDLK_RETURN;	// start
-		ids_[1].keydata = SDLK_RCTRL;	// select
+		ids_[0].keydata = SDLK_RETURN;	// START
+		ids_[1].keydata = SDLK_RCTRL;	// SELECT
 		ids_[2].keydata = SDLK_SPACE;	// A
 		ids_[3].keydata = SDLK_LCTRL;	// B
 		ids_[4].keydata = SDLK_UP;
 		ids_[5].keydata = SDLK_DOWN;
 		ids_[6].keydata = SDLK_LEFT;
 		ids_[7].keydata = SDLK_RIGHT;
-		ids_[8].keydata = SDLK_g;	// NOTHING
-		ids_[9].keydata = SDLK_h;	// NOTHING
+		ids_[8].keydata = SDLK_LSHIFT;	// X
+		ids_[9].keydata = SDLK_LALT;	// Y
 	}
 
 	virtual void exec(char const *const *argv, int index);
@@ -397,8 +397,8 @@ public:
 			InputGetter::DOWN,
 			InputGetter::LEFT,
 			InputGetter::RIGHT,
-			InputGetter::SELECT,
 			InputGetter::START,
+			InputGetter::SELECT,
 		};
 
 		return std::make_pair(ids_[i], gbbuts_mirrorssinxy[i]);
