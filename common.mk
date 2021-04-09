@@ -84,4 +84,4 @@ executable: $(OBJS)
 	$(CC) -o $(OUTPUTNAME) $(OBJS) $(CFLAGS) $(LDFLAGS)
 
 clean:
-	rm $(OBJS) $(OUTPUTNAME)
+	rm -f $(OBJS) $(OUTPUTNAME)
