@@ -50,6 +50,8 @@ extern "C"
 {
 	#include <mmenu.h>
 }
+static void* mmenu = NULL;
+static int resume_slot = -1;
 
 bool get_bootloader_from_file(void* userdata, bool isgbc, uint8_t* data, uint32_t buf_size)
 {
@@ -811,7 +813,6 @@ int GambatteSdl::exec(int const argc, char const *const argv[]) {
 
 #else //ROM_BROWSER
 
-static void* mmenu = NULL;
 int GambatteSdl::exec(int const argc, char const *const argv[]) {
 	std::puts("Gambatte SDL"
 #ifdef GAMBATTE_SDL_VERSION_STR
@@ -912,6 +913,11 @@ int GambatteSdl::exec(int const argc, char const *const argv[]) {
 	currgamename = strip_Dir(strip_Extension(romflnm));
 	strcpy(rom_path, romflnm.c_str());	
 	mmenu = dlopen("libmmenu.so", RTLD_LAZY);
+	
+	if (mmenu) {
+		ResumeSlot_t ResumeSlot = (ResumeSlot_t)dlsym(mmenu, "ResumeSlot");
+		if (ResumeSlot) resume_slot = ResumeSlot();
+	}
 	
 	loadConfig(); // load config.cfg file on startup
 
@@ -1209,6 +1215,12 @@ int GambatteSdl::run(long const sampleRate, int const latency, int const periods
 
 	SDL_PauseAudio(0);
 
+	if (resume_slot!=-1) {
+		gambatte.selectState_NoOsd(resume_slot);
+		gambatte.loadState_NoOsd();
+		resume_slot = -1;
+	}
+	
 	for (;;) {
 
 		if (handleEvents(blitter))
