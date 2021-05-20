@@ -39,7 +39,7 @@ typedef enum ScalerType {		// these are the original values used in the other fi
 	SCALER_BORDER_3X_CRT,
 } ScalerType;
 
-void scale15x_sharp(uint32_t *dst, uint32_t *src);
+void scale15x_sharp(uint16_t *dst, uint16_t *src);
 void scale15x(uint32_t *to, uint32_t *from);
 void scale15x_fast(uint32_t* dst, uint32_t* src);
 void scale15x_pseudobilinear(uint32_t* dst, uint32_t* src);

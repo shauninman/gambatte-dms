@@ -112,67 +112,46 @@ void fullscreen_upscale(uint32_t *to, uint32_t *from)
     }
 }
 
-// 160x144 to 240x216 (40,12)
-void scale15x_sharp(uint32_t *dst, uint32_t *src) {
-	// NOTE: this works because every column or row is adjacent to an interpolated 
-	// one meaning that all strokes end up being the same thickness
-	
-    uint16_t *src_px = (uint16_t*) src; // 160x144
-    uint16_t *dst_px = (uint16_t*) dst; // 320x240
-	uint16_t *next_row, *prev_row;
-	
-	dst_px += 320 * 12;
-	
-	unsigned int x,y,ox=0,oy=0,c,n,skipped=0;
-	for (y=0; y<144; y++) {
-		dst_px += 40;
-		for (x=0; x<160; x++) {
-			c = *src_px;
-			*dst_px = c;
-			dst_px += 1;
-			
-			ox = !ox;
-			if (ox) {
-				n = *(src_px+1); // right
-				if (c>n) *dst_px = n; // always pick the darker
-				else *dst_px = c;
-				dst_px += 1;
-			}
-			src_px += 1;
-		}
-		dst_px += 40;
-		
-		if (skipped) {
-			// NOTE: we hit the oy condition on the iteration before this
-			// so we've just drawn the line after the one we skipped
-			// so let's jump back to the beginning of the skipped line
-			dst_px -= 320 * 2;
-			dst_px += 40;
-			prev_row += 40;
-			next_row += 40;
-			for (x=0;x<240;x++) {
-				n = *next_row;
-				c = *prev_row;
-				if (c>n) *dst_px = n; // always pick the darker
-				else *dst_px = c;
-				prev_row += 1;
-				dst_px += 1;
-				next_row += 1;
-			}
-			dst_px += 40;
-			dst_px += 320; // skip to the line after the one we had already drawn
-			skipped = 0;
-		}
-		
-		oy = !oy;
-		if (oy) {
-			// NOTE: we hit this before skipped condition
-			// we are going to skip this interpolated line
-			// and revisit it once we've drawn the next line
-			skipped = 1;
-			prev_row = dst_px - 320;
-			dst_px += 320;
-			next_row = dst_px;
+#define DARKER(c1, c2) (c1 > c2 ? c2 : c1)
+
+// GB 160x144 to 240x216 (40,12) via eggs
+void scale15x_sharp(uint16_t *dst, uint16_t *src) {
+	register uint_fast16_t a,b,c,d,e,f;
+	uint32_t x,y;
+
+	// centering
+	dst += (320*((240-216)/2)) + (320-240)/2;
+
+	for (y=(144/2); y>0 ; y--, src+=160, dst+=320*2+(320-240))
+	{
+		for (x=(160/4); x>0; x--, src+=4, dst+=6)
+		{
+			a = *(src+0);
+			b = *(src+1);
+			c = *(src+160);
+			d = *(src+161);
+			e = DARKER(a,c);
+			f = DARKER(b,d);
+
+			*(uint32_t*)(dst+  0) = a|(DARKER(a,b)<<16);
+			*(uint32_t*)(dst+320) = e|(DARKER(e,f)<<16);
+			*(uint32_t*)(dst+640) = c|(DARKER(c,d)<<16);
+
+			c = *(src+162);
+			a = *(src+2);
+			e = DARKER(a,c);
+
+			*(uint32_t*)(dst+  2) = b|(a<<16);
+			*(uint32_t*)(dst+322) = f|(e<<16);
+			*(uint32_t*)(dst+642) = d|(c<<16);
+
+			b = *(src+3);
+			d = *(src+163);
+			f = DARKER(b,d);
+
+			*(uint32_t*)(dst+  4) = DARKER(a,b)|(b<<16);
+			*(uint32_t*)(dst+324) = DARKER(e,f)|(f<<16);
+			*(uint32_t*)(dst+644) = DARKER(c,d)|(d<<16);
 		}
 	}
 }

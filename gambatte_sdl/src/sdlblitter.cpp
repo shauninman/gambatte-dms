@@ -505,7 +505,7 @@ void SdlBlitter::draw() {
 				SDL_BlitSurface(surface, NULL, screen, &dst);
 				break;
 			case SCALER_15X_SHARP:
-				scale15x_sharp((uint32_t*)((uint8_t *)screen->pixels), (uint32_t*)surface->pixels);
+				scale15x_sharp((uint16_t*)screen->pixels, (uint16_t*)surface->pixels);
 				break;
 			case SCALER_15X:		/* Ayla's 1.5x scaler */
 				offset = (2 * (320 - 240) / 2) + ((240 - 216) / 2) * screen->pitch;
@@ -589,7 +589,7 @@ void SdlBlitter::draw() {
 				SDL_BlitSurface(currframe, NULL, screen, &dst);
 				break;
 			case SCALER_15X_SHARP:
-				scale15x_sharp((uint32_t*)((uint8_t *)screen->pixels), (uint32_t*)currframe->pixels);
+				scale15x_sharp((uint16_t*)screen->pixels, (uint16_t*)currframe->pixels);
 				break;
 			case SCALER_15X:		/* Ayla's 1.5x scaler */
 				offset = (2 * (320 - 240) / 2) + ((240 - 216) / 2) * screen->pitch;
@@ -688,7 +688,7 @@ void SdlBlitter::scaleMenu() {
 			SDL_BlitSurface(menuscreen, NULL, screen, &dst);
 			break;
 		case SCALER_15X_SHARP:
-			scale15x_sharp((uint32_t*)((uint8_t *)screen->pixels), (uint32_t*)menuscreen->pixels);
+			scale15x_sharp((uint16_t*)screen->pixels, (uint16_t*)menuscreen->pixels);
 			break;
 		case SCALER_15X:		/* Ayla's 1.5x scaler */
 			offset = (2 * (320 - 240) / 2) + ((240 - 216) / 2) * screen->pitch;
