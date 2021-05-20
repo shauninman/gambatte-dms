@@ -263,7 +263,7 @@ void main_menu() {
 
     //switchToMenuAudio();
 
-    SDL_EnableKeyRepeat(250, 83);
+    SDL_EnableKeyRepeat(300, 100);
     forcemenuexit = 0;
 
     menu_t *menu;
